@@ -1,6 +1,6 @@
 {
   "name": "mdast-comment-marker",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Parse a comment marker in mdast",
   "license": "MIT",
   "keywords": [
