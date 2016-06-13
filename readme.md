@@ -16,7 +16,6 @@ AMD, CommonJS, and globals module, [uncompressed and compressed][releases].
 ## Usage
 
 ```javascript
-var remark = require('remark');
 var marker = require('mdast-comment-marker');
 ```
 

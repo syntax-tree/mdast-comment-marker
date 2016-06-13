@@ -1,4 +1,3 @@
-var remark = require('remark');
 var marker = require('./index.js');
 
 // A simple marker:
