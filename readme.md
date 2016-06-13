@@ -1,17 +1,19 @@
-# mdast-comment-marker [![Build Status][travis-badge]][travis] [![Coverage Status][codecov-badge]][codecov]
+# mdast-comment-marker [![Build Status][build-badge]][build-status] [![Coverage Status][coverage-badge]][coverage-status] [![Chat][chat-badge]][chat]
 
-Parse a comment marker in [mdast][mdast].
+<!--lint disable list-item-spacing heading-increment list-item-indent-->
+
+Parse an [MDAST][] comment marker.
 
 ## Installation
 
-[npm][npm-install]:
+[npm][]:
 
 ```bash
 npm install mdast-comment-marker
 ```
 
-**mdast-comment-marker** is also available for [duo][duo-install], and as an
-AMD, CommonJS, and globals module, [uncompressed and compressed][releases].
+**mdast-comment-marker** is also available as an AMD, CommonJS, and
+globals module, [uncompressed and compressed][releases].
 
 ## Usage
 
@@ -91,26 +93,25 @@ null
 
 Parse a comment marker.
 
-**Parameters**
+###### Parameters
 
-*   `node` ([`Node`][mdast-node]) — Node to parse;
+*   `node` ([`Node`][node]) — Node to parse
 
-**Returns**: `Marker?` — Information, when applicable.
+###### Returns
+
+[`Marker?`][marker] — Information, when applicable.
 
 ### `Marker`
 
-A marker.
+A comment marker.
 
-**Properties**
+###### Properties
 
 *   `name` (`string`) — Name of marker;
-
 *   `attributes` (`string`) — Value after name;
-
 *   `parameters` (`Object`) — Parsed attributes, tries to convert
     values to numbers and booleans when possible;
-
-*   `node` ([`Node`][mdast-node]) — Reference to given node.
+*   `node` ([`Node`][node]) — Reference to given node.
 
 ## License
 
@@ -118,17 +119,17 @@ A marker.
 
 <!-- Definitions -->
 
-[travis-badge]: https://img.shields.io/travis/wooorm/mdast-comment-marker.svg
+[build-badge]: https://img.shields.io/travis/wooorm/mdast-comment-marker.svg
 
-[travis]: https://travis-ci.org/wooorm/mdast-comment-marker
+[build-status]: https://travis-ci.org/wooorm/mdast-comment-marker
 
-[codecov-badge]: https://img.shields.io/codecov/c/github/wooorm/mdast-comment-marker.svg
+[coverage-badge]: https://img.shields.io/codecov/c/github/wooorm/mdast-comment-marker.svg
 
-[codecov]: https://codecov.io/github/wooorm/mdast-comment-marker
+[coverage-status]: https://codecov.io/github/wooorm/mdast-comment-marker
 
-[npm-install]: https://docs.npmjs.com/cli/install
+[chat-badge]: https://img.shields.io/gitter/room/wooorm/remark.svg
 
-[duo-install]: http://duojs.org/#getting-started
+[chat]: https://gitter.im/wooorm/remark
 
 [releases]: https://github.com/wooorm/mdast-comment-marker/releases
 
@@ -136,6 +137,10 @@ A marker.
 
 [author]: http://wooorm.com
 
+[npm]: https://docs.npmjs.com/cli/install
+
 [mdast]: https://github.com/wooorm/mdast
 
-[mdast-node]: https://github.com/wooorm/mdast#node
+[node]: https://github.com/wooorm/mdast#node
+
+[marker]: #marker
