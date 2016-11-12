@@ -9,17 +9,14 @@
     "remark",
     "utility"
   ],
-  "files": [
-    "index.js"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wooorm/mdast-comment-marker.git"
-  },
+  "repository": "https://github.com/wooorm/mdast-comment-marker",
   "bugs": "https://github.com/wooorm/mdast-comment-marker/issues",
   "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
+  ],
+  "files": [
+    "index.js"
   ],
   "dependencies": {},
   "devDependencies": {
