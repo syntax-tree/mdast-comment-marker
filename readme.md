@@ -1,7 +1,5 @@
 # mdast-comment-marker [![Build Status][build-badge]][build-status] [![Coverage Status][coverage-badge]][coverage-status] [![Chat][chat-badge]][chat]
 
-<!--lint disable list-item-spacing heading-increment list-item-indent-->
-
 Parse an [MDAST][] comment marker.
 
 ## Installation
@@ -19,14 +17,10 @@ globals module, [uncompressed and compressed][releases].
 
 ```javascript
 var marker = require('mdast-comment-marker');
-```
 
-A simple marker:
-
-```javascript
 var result = marker({
-    'type': 'html',
-    'value': '<!--foo-->'
+  type: 'html',
+  value: '<!--foo-->'
 });
 ```
 
@@ -48,8 +42,8 @@ Parameters:
 
 ```javascript
 result = marker({
-    'type': 'html',
-    'value': '<!--foo bar baz=12.4 qux="test test" quux=\'false\'-->'
+  type: 'html',
+  value: '<!--foo bar baz=12.4 qux="test test" quux=\'false\'-->'
 });
 ```
 
@@ -76,8 +70,8 @@ Non-markers:
 
 ```javascript
 result = marker({
-    'type': 'html',
-    'value': '<!doctype html>'
+  type: 'html',
+  value: '<!doctype html>'
 });
 ```
 
