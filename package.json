@@ -9,8 +9,8 @@
     "remark",
     "utility"
   ],
-  "repository": "https://github.com/wooorm/mdast-comment-marker",
-  "bugs": "https://github.com/wooorm/mdast-comment-marker/issues",
+  "repository": "https://github.com/syntax-tree/mdast-comment-marker",
+  "bugs": "https://github.com/syntax-tree/mdast-comment-marker/issues",
   "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"

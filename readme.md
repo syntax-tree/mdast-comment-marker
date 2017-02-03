@@ -113,19 +113,19 @@ A comment marker.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/wooorm/mdast-comment-marker.svg
+[build-badge]: https://img.shields.io/travis/syntax-tree/mdast-comment-marker.svg
 
-[build-status]: https://travis-ci.org/wooorm/mdast-comment-marker
+[build-status]: https://travis-ci.org/syntax-tree/mdast-comment-marker
 
-[coverage-badge]: https://img.shields.io/codecov/c/github/wooorm/mdast-comment-marker.svg
+[coverage-badge]: https://img.shields.io/codecov/c/github/syntax-tree/mdast-comment-marker.svg
 
-[coverage-status]: https://codecov.io/github/wooorm/mdast-comment-marker
+[coverage-status]: https://codecov.io/github/syntax-tree/mdast-comment-marker
 
 [chat-badge]: https://img.shields.io/gitter/room/wooorm/remark.svg
 
 [chat]: https://gitter.im/wooorm/remark
 
-[releases]: https://github.com/wooorm/mdast-comment-marker/releases
+[releases]: https://github.com/syntax-tree/mdast-comment-marker/releases
 
 [license]: LICENSE
 
@@ -133,8 +133,8 @@ A comment marker.
 
 [npm]: https://docs.npmjs.com/cli/install
 
-[mdast]: https://github.com/wooorm/mdast
+[mdast]: https://github.com/syntax-tree/mdast
 
-[node]: https://github.com/wooorm/mdast#node
+[node]: https://github.com/syntax-tree/unist#node
 
 [marker]: #marker
