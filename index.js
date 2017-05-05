@@ -6,6 +6,9 @@ module.exports = marker;
 /* HTML type. */
 var T_HTML = 'html';
 
+/* Expression for eliminating extra spaces */
+var SPACES = /\s+/g;
+
 /* Expression for parsing parameters. */
 var PARAMETERS = new RegExp(
   '\\s+' +
@@ -112,5 +115,5 @@ function parameters(value) {
     return '';
   });
 
-  return rest ? null : attributes;
+  return rest.replace(SPACES, '') ? null : attributes;
 }
