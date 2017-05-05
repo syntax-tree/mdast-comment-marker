@@ -64,6 +64,22 @@ test('normalize(value, allowApostrophes)', function (t) {
 
   node = {
     type: 'html',
+    value: '<!-- foo -->'
+  };
+
+  t.deepEqual(
+    marker(node),
+    {
+      name: 'foo',
+      attributes: '',
+      parameters: {},
+      node: node
+    },
+    'marker without attributes ignoring spaces'
+  );
+
+  node = {
+    type: 'html',
     value: '<!--foo bar-->'
   };
 
