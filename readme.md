@@ -10,9 +10,6 @@ Parse an [MDAST][] comment marker.
 npm install mdast-comment-marker
 ```
 
-**mdast-comment-marker** is also available as an AMD, CommonJS, and
-globals module, [uncompressed and compressed][releases].
-
 ## Usage
 
 ```javascript
@@ -124,8 +121,6 @@ A comment marker.
 [chat-badge]: https://img.shields.io/gitter/room/wooorm/remark.svg
 
 [chat]: https://gitter.im/wooorm/remark
-
-[releases]: https://github.com/syntax-tree/mdast-comment-marker/releases
 
 [license]: LICENSE
 
