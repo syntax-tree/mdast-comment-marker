@@ -67,11 +67,11 @@ A comment marker.
 
 ###### Properties
 
-*   `name` (`string`) — Name of marker;
-*   `attributes` (`string`) — Value after name;
+*   `name` (`string`) — Name of marker
+*   `attributes` (`string`) — Value after name
 *   `parameters` (`Object`) — Parsed attributes, tries to convert
-    values to numbers and booleans when possible;
-*   `node` ([`Node`][node]) — Reference to given node.
+    values to numbers and booleans when possible
+*   `node` ([`Node`][node]) — Reference to given node
 
 ## License
 
