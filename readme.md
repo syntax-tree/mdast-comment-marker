@@ -15,66 +15,35 @@ npm install mdast-comment-marker
 ```javascript
 var marker = require('mdast-comment-marker');
 
-var result = marker({
+console.log(marker({
   type: 'html',
   value: '<!--foo-->'
-});
-```
+}));
 
-Yields:
-
-```json
-{
-  "name": "foo",
-  "attributes": "",
-  "parameters": {},
-  "node": {
-    "type": "html",
-    "value": "<!--foo-->"
-  }
-}
-```
-
-Parameters:
-
-```javascript
-result = marker({
+console.log(marker({
   type: 'html',
   value: '<!--foo bar baz=12.4 qux="test test" quux=\'false\'-->'
-});
-```
+}));
 
-Yields:
-
-```json
-{
-  "name": "foo",
-  "attributes": "bar baz=12.4 qux=\"test test\" quux='false'",
-  "parameters": {
-    "bar": true,
-    "baz": 12.4,
-    "qux": "test test",
-    "quux": false
-  },
-  "node": {
-    "type": "html",
-    "value": "<!--foo bar baz=12.4 qux=\"test test\" quux='false'-->"
-  }
-}
-```
-
-Non-markers:
-
-```javascript
-result = marker({
+console.log(marker({
   type: 'html',
   value: '<!doctype html>'
-});
+}));
 ```
 
 Yields:
 
-```json
+```js
+{ name: 'foo',
+  attributes: '',
+  parameters: {},
+  node: { type: 'html', value: '<!--foo-->' } }
+{ name: 'foo',
+  attributes: 'bar baz=12.4 qux="test test" quux=\'false\'',
+  parameters: { bar: true, baz: 12.4, qux: 'test test', quux: false },
+  node:
+   { type: 'html',
+     value: '<!--foo bar baz=12.4 qux="test test" quux=\'false\'-->' } }
 null
 ```
 
