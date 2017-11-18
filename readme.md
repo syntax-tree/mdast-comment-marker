@@ -73,6 +73,14 @@ A comment marker.
     values to numbers and booleans when possible
 *   `node` ([`Node`][node]) — Reference to given node
 
+## Contribute
+
+See [`contribute.md` in `syntax-tree/mdast`][contribute] for ways to get
+started.
+
+This organisation has a [Code of Conduct][coc].  By interacting with this
+repository, organisation, or community you agree to abide by its terms.
+
 ## License
 
 [MIT][license] © [Titus Wormer][author]
@@ -102,3 +110,7 @@ A comment marker.
 [node]: https://github.com/syntax-tree/unist#node
 
 [marker]: #marker
+
+[contribute]: https://github.com/syntax-tree/mdast/blob/master/contributing.md
+
+[coc]: https://github.com/syntax-tree/mdast/blob/master/code-of-conduct.md
