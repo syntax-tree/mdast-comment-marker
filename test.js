@@ -1,10 +1,8 @@
 'use strict';
 
-/* Dependencies. */
 var test = require('tape');
-var marker = require('./');
+var marker = require('.');
 
-/* Tests. */
 test('normalize(value, allowApostrophes)', function (t) {
   var node;
 
