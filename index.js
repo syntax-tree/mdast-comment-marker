@@ -1,54 +1,54 @@
-'use strict';
+'use strict'
 
 /* Expose. */
-module.exports = marker;
+module.exports = marker
 
 /* HTML type. */
-var T_HTML = 'html';
+var T_HTML = 'html'
 
 /* Expression for eliminating extra spaces */
-var SPACES = /\s+/g;
+var SPACES = /\s+/g
 
 /* Expression for parsing parameters. */
 var PARAMETERS = new RegExp(
   '\\s+' +
-  '(' +
+    '(' +
     '[-a-z0-9_]+' +
-  ')' +
-  '(?:' +
+    ')' +
+    '(?:' +
     '=' +
     '(?:' +
-      '"' +
-      '(' +
-        '(?:' +
-          '\\\\[\\s\\S]' +
-          '|' +
-          '[^"]' +
-        ')+' +
-      ')' +
-      '"' +
-      '|' +
-      '\'' +
-      '(' +
-        '(?:' +
-          '\\\\[\\s\\S]' +
-          '|' +
-          '[^\']' +
-        ')+' +
-      ')' +
-      '\'' +
-      '|' +
-      '(' +
-        '(?:' +
-          '\\\\[\\s\\S]' +
-          '|' +
-          '[^"\'\\s]' +
-        ')+' +
-      ')' +
+    '"' +
+    '(' +
+    '(?:' +
+    '\\\\[\\s\\S]' +
+    '|' +
+    '[^"]' +
+    ')+' +
     ')' +
-  ')?',
+    '"' +
+    '|' +
+    "'" +
+    '(' +
+    '(?:' +
+    '\\\\[\\s\\S]' +
+    '|' +
+    "[^']" +
+    ')+' +
+    ')' +
+    "'" +
+    '|' +
+    '(' +
+    '(?:' +
+    '\\\\[\\s\\S]' +
+    '|' +
+    '[^"\'\\s]' +
+    ')+' +
+    ')' +
+    ')' +
+    ')?',
   'gi'
-);
+)
 
 var MARKER = new RegExp(
   '(' +
@@ -60,30 +60,30 @@ var MARKER = new RegExp(
     '\\s*' +
     '-->' +
     '\\s*' +
-  ')'
-);
+    ')'
+)
 
 /* Parse a comment marker */
 function marker(node) {
-  var value;
-  var match;
-  var params;
+  var value
+  var match
+  var params
 
   if (!node || node.type !== T_HTML) {
-    return null;
+    return null
   }
 
-  value = node.value;
-  match = value.match(MARKER);
+  value = node.value
+  match = value.match(MARKER)
 
   if (!match || match[1].length !== value.length) {
-    return null;
+    return null
   }
 
-  params = parameters(match[3] || '');
+  params = parameters(match[3] || '')
 
   if (!params) {
-    return null;
+    return null
   }
 
   return {
@@ -91,29 +91,30 @@ function marker(node) {
     attributes: match[4] || '',
     parameters: params,
     node: node
-  };
+  }
 }
-
-/* eslint-disable max-params */
 
 /* Parse `value` into an object. */
 function parameters(value) {
-  var attributes = {};
-  var rest = value.replace(PARAMETERS, function ($0, $1, $2, $3, $4) {
-    var result = $2 || $3 || $4 || '';
+  var attributes = {}
+  var rest = value.replace(PARAMETERS, replacer)
+
+  return rest.replace(SPACES, '') ? null : attributes
+
+  /* eslint-disable max-params */
+  function replacer($0, $1, $2, $3, $4) {
+    var result = $2 || $3 || $4 || ''
 
     if (result === 'true' || result === '') {
-      result = true;
+      result = true
     } else if (result === 'false') {
-      result = false;
+      result = false
     } else if (!isNaN(result)) {
-      result = Number(result);
+      result = Number(result)
     }
 
-    attributes[$1] = result;
+    attributes[$1] = result
 
-    return '';
-  });
-
-  return rest.replace(SPACES, '') ? null : attributes;
+    return ''
+  }
 }
