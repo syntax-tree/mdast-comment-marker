@@ -1,16 +1,11 @@
 'use strict'
 
-/* Expose. */
 module.exports = marker
 
-/* HTML type. */
-var T_HTML = 'html'
+var whiteSpaceExpression = /\s+/g
 
-/* Expression for eliminating extra spaces */
-var SPACES = /\s+/g
-
-/* Expression for parsing parameters. */
-var PARAMETERS = new RegExp(
+// Expression for parsing parameters.
+var parametersExpression = new RegExp(
   '\\s+' +
     '(' +
     '[-a-z0-9_]+' +
@@ -50,7 +45,7 @@ var PARAMETERS = new RegExp(
   'gi'
 )
 
-var MARKER = new RegExp(
+var markerExpression = new RegExp(
   '(' +
     '\\s*' +
     '<!--' +
@@ -63,18 +58,18 @@ var MARKER = new RegExp(
     ')'
 )
 
-/* Parse a comment marker */
+// Parse a comment marker.
 function marker(node) {
   var value
   var match
   var params
 
-  if (!node || node.type !== T_HTML) {
+  if (!node || node.type !== 'html') {
     return null
   }
 
   value = node.value
-  match = value.match(MARKER)
+  match = value.match(markerExpression)
 
   if (!match || match[1].length !== value.length) {
     return null
@@ -94,12 +89,12 @@ function marker(node) {
   }
 }
 
-/* Parse `value` into an object. */
+// Parse `value` into an object.
 function parameters(value) {
   var attributes = {}
-  var rest = value.replace(PARAMETERS, replacer)
+  var rest = value.replace(parametersExpression, replacer)
 
-  return rest.replace(SPACES, '') ? null : attributes
+  return rest.replace(whiteSpaceExpression, '') ? null : attributes
 
   /* eslint-disable max-params */
   function replacer($0, $1, $2, $3, $4) {
