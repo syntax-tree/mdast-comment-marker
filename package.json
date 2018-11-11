@@ -11,9 +11,9 @@
   ],
   "repository": "syntax-tree/mdast-comment-marker",
   "bugs": "https://github.com/syntax-tree/mdast-comment-marker/issues",
-  "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
+  "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
   "contributors": [
-    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
+    "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
     "Masayuki Izumi <masayuki@izumin.info> (http://izumin.info)"
   ],
   "files": [
