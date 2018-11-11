@@ -1,6 +1,6 @@
 # mdast-comment-marker [![Build][build-badge]][build] [![Coverage][coverage-badge]][coverage] [![Downloads][downloads-badge]][downloads] [![Chat][chat-badge]][chat]
 
-Parse an [MDAST][] comment marker.
+Parse [mdast][] comment markers.
 
 ## Installation
 
