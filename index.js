@@ -4,86 +4,49 @@ module.exports = marker
 
 var whiteSpaceExpression = /\s+/g
 
-// Expression for parsing parameters.
-var parametersExpression = new RegExp(
-  '\\s+' +
-    '(' +
-    '[-a-z0-9_]+' +
-    ')' +
-    '(?:' +
-    '=' +
-    '(?:' +
-    '"' +
-    '(' +
-    '(?:' +
-    '\\\\[\\s\\S]' +
-    '|' +
-    '[^"]' +
-    ')+' +
-    ')' +
-    '"' +
-    '|' +
-    "'" +
-    '(' +
-    '(?:' +
-    '\\\\[\\s\\S]' +
-    '|' +
-    "[^']" +
-    ')+' +
-    ')' +
-    "'" +
-    '|' +
-    '(' +
-    '(?:' +
-    '\\\\[\\s\\S]' +
-    '|' +
-    '[^"\'\\s]' +
-    ')+' +
-    ')' +
-    ')' +
-    ')?',
-  'gi'
-)
+var parametersExpression = /\s+([-a-z0-9_]+)(?:=(?:"((?:\\[\s\S]|[^"])+)"|'((?:\\[\s\S]|[^'])+)'|((?:\\[\s\S]|[^"'\s])+)))?/gi
+
+var commentExpression = /\s*([a-zA-Z0-9-]+)(\s+([\s\S]*))?\s*/
 
 var markerExpression = new RegExp(
-  '(' +
-    '\\s*' +
-    '<!--' +
-    '\\s*' +
-    '([a-zA-Z0-9-]+)' +
-    '(\\s+([\\s\\S]*?))?' +
-    '\\s*' +
-    '-->' +
-    '\\s*' +
-    ')'
+  '(\\s*<!--' + commentExpression.source + '-->\\s*)'
 )
 
 // Parse a comment marker.
 function marker(node) {
+  var type
   var value
   var match
   var params
 
-  if (!node || node.type !== 'html') {
+  if (!node) {
+    return null
+  }
+
+  type = node.type
+
+  if (type !== 'html' && type !== 'comment') {
     return null
   }
 
   value = node.value
-  match = value.match(markerExpression)
+  match = value.match(type === 'comment' ? commentExpression : markerExpression)
 
-  if (!match || match[1].length !== value.length) {
+  if (!match || match[0].length !== value.length) {
     return null
   }
 
-  params = parameters(match[3] || '')
+  match = match.slice(node.type === 'comment' ? 1 : 2)
+
+  params = parameters(match[1] || '')
 
   if (!params) {
     return null
   }
 
   return {
-    name: match[2],
-    attributes: match[4] || '',
+    name: match[0],
+    attributes: match[2] || '',
     parameters: params,
     node: node
   }

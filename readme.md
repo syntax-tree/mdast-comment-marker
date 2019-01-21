@@ -29,6 +29,12 @@ console.log(marker({
   type: 'html',
   value: '<!doctype html>'
 }));
+
+// Also supports MDX comment nodes.
+console.log(marker({
+  type: 'comment',
+  value: 'bar'
+}));
 ```
 
 Yields:
@@ -45,6 +51,10 @@ Yields:
    { type: 'html',
      value: '<!--foo bar baz=12.4 qux="test test" quux=\'false\'-->' } }
 null
+{ name: 'bar',
+  attributes: '',
+  parameters: {},
+  node: { type: 'comment', value: 'bar' } }
 ```
 
 ## API
