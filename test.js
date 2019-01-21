@@ -3,7 +3,7 @@
 var test = require('tape')
 var marker = require('.')
 
-test('normalize(value, allowApostrophes)', function(t) {
+test('commentMaker(node)', function(t) {
   var node
 
   t.equal(marker(), null, 'should work without node')
@@ -82,10 +82,7 @@ test('normalize(value, allowApostrophes)', function(t) {
     'marker with double quoted attributes'
   )
 
-  node = {
-    type: 'html',
-    value: "<!--foo bar='baz qux'-->"
-  }
+  node = {type: 'html', value: "<!--foo bar='baz qux'-->"}
 
   t.deepEqual(
     marker(node),
@@ -151,6 +148,138 @@ test('normalize(value, allowApostrophes)', function(t) {
 
   t.equal(
     marker({type: 'html', value: '<!--foo |-->'}),
+    null,
+    'marker stop for invalid parameters (#3)'
+  )
+
+  t.end()
+})
+
+test('comment node', function(t) {
+  var node
+
+  t.equal(
+    marker({type: 'comment', value: ' '}),
+    null,
+    'should work for empty comments'
+  )
+
+  node = {type: 'comment', value: 'foo'}
+
+  t.deepEqual(
+    marker(node),
+    {name: 'foo', attributes: '', parameters: {}, node: node},
+    'comment without attributes'
+  )
+
+  node = {type: 'comment', value: ' foo '}
+
+  t.deepEqual(
+    marker(node),
+    {name: 'foo', attributes: '', parameters: {}, node: node},
+    'comment without attributes ignoring spaces'
+  )
+
+  node = {type: 'comment', value: 'foo bar'}
+
+  t.deepEqual(
+    marker(node),
+    {name: 'foo', attributes: 'bar', parameters: {bar: true}, node: node},
+    'comment with boolean attributes'
+  )
+
+  node = {type: 'comment', value: 'foo bar=baz qux'}
+
+  t.deepEqual(
+    marker(node),
+    {
+      name: 'foo',
+      attributes: 'bar=baz qux',
+      parameters: {bar: 'baz', qux: true},
+      node: node
+    },
+    'comment with unquoted attributes'
+  )
+
+  node = {type: 'comment', value: 'foo bar="baz qux"'}
+
+  t.deepEqual(
+    marker(node),
+    {
+      name: 'foo',
+      attributes: 'bar="baz qux"',
+      parameters: {bar: 'baz qux'},
+      node: node
+    },
+    'comment with double quoted attributes'
+  )
+
+  node = {type: 'comment', value: "foo bar='baz qux'"}
+
+  t.deepEqual(
+    marker(node),
+    {
+      name: 'foo',
+      attributes: "bar='baz qux'",
+      parameters: {bar: 'baz qux'},
+      node: node
+    },
+    'comment with single quoted attributes'
+  )
+
+  node = {type: 'comment', value: 'foo bar=3'}
+
+  t.deepEqual(
+    marker(node),
+    {
+      name: 'foo',
+      attributes: 'bar=3',
+      parameters: {bar: 3},
+      node: node
+    },
+    'comment with numbers'
+  )
+
+  node = {type: 'comment', value: 'foo bar=true'}
+
+  t.deepEqual(
+    marker(node),
+    {
+      name: 'foo',
+      attributes: 'bar=true',
+      parameters: {bar: true},
+      node: node
+    },
+    'comment with boolean true'
+  )
+
+  node = {type: 'comment', value: 'foo bar=false'}
+
+  t.deepEqual(
+    marker(node),
+    {
+      name: 'foo',
+      attributes: 'bar=false',
+      parameters: {bar: false},
+      node: node
+    },
+    'comment with boolean false'
+  )
+
+  t.equal(
+    marker({type: 'comment', value: 'foo bar='}),
+    null,
+    'marker stop for invalid parameters (#1)'
+  )
+
+  t.equal(
+    marker({type: 'comment', value: 'foo bar= qux'}),
+    null,
+    'marker stop for invalid parameters (#2)'
+  )
+
+  t.equal(
+    marker({type: 'comment', value: 'foo |'}),
     null,
     'marker stop for invalid parameters (#3)'
   )
