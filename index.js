@@ -4,9 +4,9 @@ module.exports = marker
 
 var whiteSpaceExpression = /\s+/g
 
-var parametersExpression = /\s+([-a-z0-9_]+)(?:=(?:"((?:\\[\s\S]|[^"])+)"|'((?:\\[\s\S]|[^'])+)'|((?:\\[\s\S]|[^"'\s])+)))?/gi
+var parametersExpression = /\s+([-a-z0-9_/]+)(?:=(?:"((?:\\[\s\S]|[^"])+)"|'((?:\\[\s\S]|[^'])+)'|((?:\\[\s\S]|[^"'\s])+)))?/gi
 
-var commentExpression = /\s*([a-zA-Z0-9-]+)(\s+([\s\S]*))?\s*/
+var commentExpression = /\s*([a-zA-Z0-9-/]+)(\s+([\s\S]*))?\s*/
 
 var markerExpression = new RegExp(
   '(\\s*<!--' + commentExpression.source + '-->\\s*)'
