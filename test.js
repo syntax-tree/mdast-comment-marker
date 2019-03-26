@@ -61,7 +61,7 @@ test('commentMaker(node)', function(t) {
   t.deepEqual(
     marker(node),
     {name: 'foo', attributes: 'blala/bar', parameters: {'blala/bar': true}, node: node},
-    'marker with boolean attributes(includes slash)'
+    'marker with boolean attributes (with slash)'
   )
 
   node = {type: 'html', value: '<!--foo bar=baz qux-->'}
