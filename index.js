@@ -59,7 +59,7 @@ function parameters(value) {
 
   return rest.replace(whiteSpaceExpression, '') ? null : attributes
 
-  /* eslint-disable max-params */
+  // eslint-disable-next-line max-params
   function replacer($0, $1, $2, $3, $4) {
     var result = $2 || $3 || $4 || ''
 
