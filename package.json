@@ -31,7 +31,7 @@
     "xo": "^0.23.0"
   },
   "scripts": {
-    "format": "remark . -qfo && prettier --write '**/*.js' && xo --fix",
+    "format": "remark . -qfo && prettier --write \"**/*.js\" && xo --fix",
     "build-bundle": "browserify . -s mdastCommentMarker > mdast-comment-marker.js",
     "build-mangle": "browserify . -s mdastCommentMarker -p tinyify > mdast-comment-marker.min.js",
     "build": "npm run build-bundle && npm run build-mangle",
