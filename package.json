@@ -1,13 +1,16 @@
 {
   "name": "mdast-comment-marker",
   "version": "1.1.1",
-  "description": "Parse a comment marker in mdast",
+  "description": "mdast utility to parse a comment marker",
   "license": "MIT",
   "keywords": [
-    "marker",
+    "unist",
     "mdast",
-    "remark",
-    "utility"
+    "mdast-util",
+    "util",
+    "utility",
+    "marker",
+    "comment"
   ],
   "repository": "syntax-tree/mdast-comment-marker",
   "bugs": "https://github.com/syntax-tree/mdast-comment-marker/issues",
