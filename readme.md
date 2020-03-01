@@ -97,6 +97,11 @@ Use of `mdast-comment-marker` does not involve [**hast**][hast], user content,
 or change the tree, so there are no openings for
 [cross-site scripting (XSS)][xss] attacks.
 
+## Related
+
+*   [`mdast-zone`](https://github.com/syntax-tree/mdast-zone)
+    — treat HTML comments as ranges or markers
+
 ## Contribute
 
 See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
