@@ -3,7 +3,7 @@
 var test = require('tape')
 var marker = require('.')
 
-test('commentMaker(node)', function(t) {
+test('commentMaker(node)', function (t) {
   var node
 
   t.equal(marker(), null, 'should work without node')
@@ -155,7 +155,7 @@ test('commentMaker(node)', function(t) {
   t.end()
 })
 
-test('comment node', function(t) {
+test('comment node', function (t) {
   var node
 
   t.equal(

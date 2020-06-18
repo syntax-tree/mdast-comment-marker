@@ -4,9 +4,9 @@ module.exports = marker
 
 var whiteSpaceExpression = /\s+/g
 
-var parametersExpression = /\s+([-a-z0-9_]+)(?:=(?:"((?:\\[\s\S]|[^"])+)"|'((?:\\[\s\S]|[^'])+)'|((?:\\[\s\S]|[^"'\s])+)))?/gi
+var parametersExpression = /\s+([-\w]+)(?:=(?:"((?:\\[\s\S]|[^"])+)"|'((?:\\[\s\S]|[^'])+)'|((?:\\[\s\S]|[^"'\s])+)))?/gi
 
-var commentExpression = /\s*([a-zA-Z0-9-]+)(\s+([\s\S]*))?\s*/
+var commentExpression = /\s*([a-zA-Z\d-]+)(\s+([\s\S]*))?\s*/
 
 var markerExpression = new RegExp(
   '(\\s*<!--' + commentExpression.source + '-->\\s*)'
@@ -17,7 +17,7 @@ function marker(node) {
   var type
   var value
   var match
-  var params
+  var parameters
 
   if (!node) {
     return null
@@ -38,22 +38,22 @@ function marker(node) {
 
   match = match.slice(node.type === 'comment' ? 1 : 2)
 
-  params = parameters(match[1] || '')
+  parameters = parseParameters(match[1] || '')
 
-  if (!params) {
+  if (!parameters) {
     return null
   }
 
   return {
     name: match[0],
     attributes: match[2] || '',
-    parameters: params,
+    parameters: parameters,
     node: node
   }
 }
 
 // Parse `value` into an object.
-function parameters(value) {
+function parseParameters(value) {
   var attributes = {}
   var rest = value.replace(parametersExpression, replacer)
 
