@@ -2,10 +2,6 @@
 
 module.exports = marker
 
-var whiteSpaceExpression = /\s+/g
-
-var parametersExpression = /\s+([-\w]+)(?:=(?:"((?:\\[\s\S]|[^"])+)"|'((?:\\[\s\S]|[^'])+)'|((?:\\[\s\S]|[^"'\s])+)))?/gi
-
 var commentExpression = /\s*([a-zA-Z\d-]+)(\s+([\s\S]*))?\s*/
 
 var markerExpression = new RegExp(
@@ -14,64 +10,59 @@ var markerExpression = new RegExp(
 
 // Parse a comment marker.
 function marker(node) {
-  var type
-  var value
   var match
+  var offset
   var parameters
 
-  if (!node) {
-    return null
+  if (node && (node.type === 'html' || node.type === 'comment')) {
+    match = node.value.match(
+      node.type === 'comment' ? commentExpression : markerExpression
+    )
+
+    if (match && match[0].length === node.value.length) {
+      offset = node.type === 'comment' ? 1 : 2
+      parameters = parseParameters(match[offset + 1] || '')
+
+      if (parameters) {
+        return {
+          name: match[offset],
+          attributes: match[offset + 2] || '',
+          parameters: parameters,
+          node: node
+        }
+      }
+    }
   }
 
-  type = node.type
-
-  if (type !== 'html' && type !== 'comment') {
-    return null
-  }
-
-  value = node.value
-  match = value.match(type === 'comment' ? commentExpression : markerExpression)
-
-  if (!match || match[0].length !== value.length) {
-    return null
-  }
-
-  match = match.slice(node.type === 'comment' ? 1 : 2)
-
-  parameters = parseParameters(match[1] || '')
-
-  if (!parameters) {
-    return null
-  }
-
-  return {
-    name: match[0],
-    attributes: match[2] || '',
-    parameters: parameters,
-    node: node
-  }
+  return null
 }
 
 // Parse `value` into an object.
 function parseParameters(value) {
-  var attributes = {}
-  var rest = value.replace(parametersExpression, replacer)
+  var parameters = {}
 
-  return rest.replace(whiteSpaceExpression, '') ? null : attributes
+  return value
+    .replace(
+      /\s+([-\w]+)(?:=(?:"((?:\\[\s\S]|[^"])+)"|'((?:\\[\s\S]|[^'])+)'|((?:\\[\s\S]|[^"'\s])+)))?/gi,
+      replacer
+    )
+    .replace(/\s+/g, '')
+    ? null
+    : parameters
 
   // eslint-disable-next-line max-params
   function replacer($0, $1, $2, $3, $4) {
-    var result = $2 || $3 || $4 || ''
+    var value = $2 || $3 || $4 || ''
 
-    if (result === 'true' || result === '') {
-      result = true
-    } else if (result === 'false') {
-      result = false
-    } else if (!isNaN(result)) {
-      result = Number(result)
+    if (value === 'true' || value === '') {
+      value = true
+    } else if (value === 'false') {
+      value = false
+    } else if (!isNaN(value)) {
+      value = Number(value)
     }
 
-    attributes[$1] = result
+    parameters[$1] = value
 
     return ''
   }
