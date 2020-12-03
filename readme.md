@@ -118,9 +118,9 @@ abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/syntax-tree/mdast-comment-marker.svg
+[build-badge]: https://github.com/syntax-tree/mdast-comment-marker/workflows/main/badge.svg
 
-[build]: https://travis-ci.org/syntax-tree/mdast-comment-marker
+[build]: https://github.com/syntax-tree/mdast-comment-marker/actions
 
 [coverage-badge]: https://img.shields.io/codecov/c/github/syntax-tree/mdast-comment-marker.svg
 
