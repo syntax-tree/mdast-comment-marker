@@ -35,12 +35,12 @@
     "remark-preset-wooorm": "^8.0.0",
     "tape": "^5.0.0",
     "tinyify": "^3.0.0",
-    "xo": "^0.34.0"
+    "xo": "^0.35.0"
   },
   "scripts": {
     "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
-    "build-bundle": "browserify . -s mdastCommentMarker > mdast-comment-marker.js",
-    "build-mangle": "browserify . -s mdastCommentMarker -p tinyify > mdast-comment-marker.min.js",
+    "build-bundle": "browserify . -s mdastCommentMarker -o mdast-comment-marker.js",
+    "build-mangle": "browserify . -s mdastCommentMarker -o mdast-comment-marker.min.js -p tinyify",
     "build": "npm run build-bundle && npm run build-mangle",
     "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test.js",
