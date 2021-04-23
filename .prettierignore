@@ -1,5 +1,2 @@
 coverage/
-mdast-comment-marker.js
-mdast-comment-marker.min.js
-*.json
 *.md

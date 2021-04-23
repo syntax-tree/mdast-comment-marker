@@ -1,7 +1,3 @@
-'use strict'
-
-module.exports = marker
-
 var commentExpression = /\s*([a-zA-Z\d-]+)(\s+([\s\S]*))?\s*/
 
 var markerExpression = new RegExp(
@@ -9,7 +5,7 @@ var markerExpression = new RegExp(
 )
 
 // Parse a comment marker.
-function marker(node) {
+export function commentMarker(node) {
   var match
   var offset
   var parameters
@@ -27,8 +23,8 @@ function marker(node) {
         return {
           name: match[offset],
           attributes: match[offset + 2] || '',
-          parameters: parameters,
-          node: node
+          parameters,
+          node
         }
       }
     }
@@ -58,7 +54,7 @@ function parseParameters(value) {
       value = true
     } else if (value === 'false') {
       value = false
-    } else if (!isNaN(value)) {
+    } else if (!Number.isNaN(Number(value))) {
       value = Number(value)
     }
 

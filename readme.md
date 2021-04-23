@@ -12,6 +12,9 @@
 
 ## Install
 
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
+Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
+
 [npm][]:
 
 ```sh
@@ -21,25 +24,25 @@ npm install mdast-comment-marker
 ## Use
 
 ```js
-var marker = require('mdast-comment-marker');
+import {commentMarker} from 'mdast-comment-marker'
 
-console.log(marker({
+console.log(commentMarker({
   type: 'html',
   value: '<!--foo-->'
 }));
 
-console.log(marker({
+console.log(commentMarker({
   type: 'html',
   value: '<!--foo bar baz=12.4 qux="test test" quux=\'false\'-->'
 }));
 
-console.log(marker({
+console.log(commentMarker({
   type: 'html',
   value: '<!doctype html>'
 }));
 
-// Also supports MDX comment nodes.
-console.log(marker({
+// Also supports MDX@1 comment nodes.
+console.log(commentMarker({
   type: 'comment',
   value: 'bar'
 }));
@@ -67,7 +70,10 @@ null
 
 ## API
 
-### `marker(node)`
+This package exports the following identifiers: `commentMarker`.
+There is no default export.
+
+### `commentMarker(node)`
 
 Parse a comment marker.
 
