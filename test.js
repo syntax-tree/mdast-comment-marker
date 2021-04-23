@@ -1,7 +1,12 @@
+/**
+ * @typedef {import('unist').Node} Node
+ */
+
 import test from 'tape'
 import {commentMarker} from './index.js'
 
 test('commentMaker(node)', function (t) {
+  /** @type {Node} */
   var node
 
   t.equal(commentMarker(), null, 'should work without node')
@@ -154,6 +159,7 @@ test('commentMaker(node)', function (t) {
 })
 
 test('comment node', function (t) {
+  /** @type {Node} */
   var node
 
   t.equal(
