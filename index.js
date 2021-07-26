@@ -25,26 +25,17 @@ const markerExpression = new RegExp(
 
 /**
  * Parse a comment marker.
- * @param {unknown} node
+ * @param {unknown} value
  * @returns {Marker|null}
  */
-export function commentMarker(node) {
-  if (
-    node &&
-    typeof node === 'object' &&
-    // @ts-ignore hush
-    (node.type === 'html' || node.type === 'comment')
-  ) {
-    // @ts-ignore hush
-    const match = node.value.match(
-      // @ts-ignore hush
-      node.type === 'comment' ? commentExpression : markerExpression
+export function commentMarker(value) {
+  if (applicable(value)) {
+    const match = value.value.match(
+      value.type === 'comment' ? commentExpression : markerExpression
     )
 
-    // @ts-ignore hush
-    if (match && match[0].length === node.value.length) {
-      // @ts-ignore hush
-      const offset = node.type === 'comment' ? 1 : 2
+    if (match && match[0].length === value.value.length) {
+      const offset = value.type === 'comment' ? 1 : 2
       const parameters = parseParameters(match[offset + 1] || '')
 
       if (parameters) {
@@ -52,8 +43,7 @@ export function commentMarker(node) {
           name: match[offset],
           attributes: match[offset + 2] || '',
           parameters,
-          // @ts-ignore hush
-          node
+          node: value
         }
       }
     }
@@ -105,4 +95,18 @@ function parseParameters(value) {
 
     return ''
   }
+}
+
+/**
+ * @param {unknown} value
+ * @returns {value is HtmlNode | CommentNode}
+ */
+function applicable(value) {
+  return Boolean(
+    value &&
+      typeof value === 'object' &&
+      'type' in value &&
+      // @ts-expect-error hush
+      (value.type === 'html' || value.type === 'comment')
+  )
 }

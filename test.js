@@ -8,6 +8,7 @@ import test from 'tape'
 import {commentMarker} from './index.js'
 
 test('commentMaker(node)', (t) => {
+  // @ts-expect-error: runtime: not enough arguments.
   t.equal(commentMarker(), null, 'should work without node')
 
   /** @type {Paragraph} */
