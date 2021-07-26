@@ -7,7 +7,7 @@
 import test from 'tape'
 import {commentMarker} from './index.js'
 
-test('commentMaker(node)', function (t) {
+test('commentMaker(node)', (t) => {
   t.equal(commentMarker(), null, 'should work without node')
 
   /** @type {Paragraph} */
@@ -145,7 +145,7 @@ test('commentMaker(node)', function (t) {
   t.end()
 })
 
-test('comment node', function (t) {
+test('comment node', (t) => {
   /** @type {Literal & {type: 'comment'}} */
   let comment = {type: 'comment', value: ' '}
 

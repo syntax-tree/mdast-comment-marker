@@ -17,9 +17,9 @@
  * @property {HtmlNode|CommentNode} node
  */
 
-var commentExpression = /\s*([a-zA-Z\d-]+)(\s+([\s\S]*))?\s*/
+const commentExpression = /\s*([a-zA-Z\d-]+)(\s+([\s\S]*))?\s*/
 
-var markerExpression = new RegExp(
+const markerExpression = new RegExp(
   '(\\s*<!--' + commentExpression.source + '-->\\s*)'
 )
 
@@ -29,13 +29,6 @@ var markerExpression = new RegExp(
  * @returns {Marker|null}
  */
 export function commentMarker(node) {
-  /** @type {RegExpMatchArray} */
-  var match
-  /** @type {number} */
-  var offset
-  /** @type {MarkerParameters} */
-  var parameters
-
   if (
     node &&
     typeof node === 'object' &&
@@ -43,7 +36,7 @@ export function commentMarker(node) {
     (node.type === 'html' || node.type === 'comment')
   ) {
     // @ts-ignore hush
-    match = node.value.match(
+    const match = node.value.match(
       // @ts-ignore hush
       node.type === 'comment' ? commentExpression : markerExpression
     )
@@ -51,8 +44,8 @@ export function commentMarker(node) {
     // @ts-ignore hush
     if (match && match[0].length === node.value.length) {
       // @ts-ignore hush
-      offset = node.type === 'comment' ? 1 : 2
-      parameters = parseParameters(match[offset + 1] || '')
+      const offset = node.type === 'comment' ? 1 : 2
+      const parameters = parseParameters(match[offset + 1] || '')
 
       if (parameters) {
         return {
@@ -77,7 +70,7 @@ export function commentMarker(node) {
  */
 function parseParameters(value) {
   /** @type {MarkerParameters} */
-  var parameters = {}
+  const parameters = {}
 
   return value
     .replace(
@@ -98,7 +91,7 @@ function parseParameters(value) {
   // eslint-disable-next-line max-params
   function replacer(_, $1, $2, $3, $4) {
     /** @type {MarkerParameterValue} */
-    var value = $2 || $3 || $4 || ''
+    let value = $2 || $3 || $4 || ''
 
     if (value === 'true' || value === '') {
       value = true
