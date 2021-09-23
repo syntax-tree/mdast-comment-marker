@@ -41,31 +41,41 @@ console.log(commentMarker({
   value: '<!doctype html>'
 }));
 
-// Also supports MDX@1 comment nodes.
+// Also supports MDX@2 expressions:
 console.log(commentMarker({
-  type: 'comment',
-  value: 'bar'
+  type: 'mdxFlowExpression',
+  value: '/* lint disable heading-style */'
 }));
 ```
 
 Yields:
 
 ```js
-{ name: 'foo',
+{
+  name: 'foo',
   attributes: '',
   parameters: {},
-  node: { type: 'html', value: '<!--foo-->' } }
-{ name: 'foo',
-  attributes: 'bar baz=12.4 qux="test test" quux=\'false\'',
+  node: { type: 'html', value: '<!--foo-->' }
+}
+{
+  name: 'foo',
+  attributes: `bar baz=12.4 qux="test test" quux='false'`,
   parameters: { bar: true, baz: 12.4, qux: 'test test', quux: false },
-  node:
-   { type: 'html',
-     value: '<!--foo bar baz=12.4 qux="test test" quux=\'false\'-->' } }
+  node: {
+    type: 'html',
+    value: `<!--foo bar baz=12.4 qux="test test" quux='false'-->`
+  }
+}
 null
-{ name: 'bar',
-  attributes: '',
-  parameters: {},
-  node: { type: 'comment', value: 'bar' } }
+{
+  name: 'lint',
+  attributes: 'disable heading-style',
+  parameters: { disable: true, 'heading-style': true },
+  node: {
+    type: 'mdxFlowExpression',
+    value: '/* lint disable heading-style */'
+  }
+}
 ```
 
 ## API
