@@ -2,6 +2,8 @@
  * @typedef {import('mdast').Literal} Literal
  * @typedef {import('mdast').Paragraph} Paragraph
  * @typedef {import('mdast').HTML} HTML
+ * @typedef {import('mdast-util-mdx-expression').MDXFlowExpression} MDXFlowExpression
+ * @typedef {import('mdast-util-mdx-expression').MDXTextExpression} MDXTextExpression
  */
 
 import test from 'tape'
@@ -276,6 +278,35 @@ test('comment node', (t) => {
     commentMarker(comment),
     null,
     'marker stop for invalid parameters (#3)'
+  )
+
+  t.end()
+})
+
+test('MDX@2 expressions', (t) => {
+  /** @type {MDXFlowExpression|MDXTextExpression} */
+  let node = {
+    type: 'mdxFlowExpression',
+    value: '/* lint disable heading-style */'
+  }
+
+  t.deepEqual(
+    commentMarker(node),
+    {
+      name: 'lint',
+      attributes: 'disable heading-style',
+      parameters: {disable: true, 'heading-style': true},
+      node
+    },
+    'should work for comments'
+  )
+
+  node = {type: 'mdxTextExpression', value: '/* lint enable */'}
+
+  t.deepEqual(
+    commentMarker(node),
+    {name: 'lint', attributes: 'enable', parameters: {enable: true}, node},
+    'should work for comments'
   )
 
   t.end()

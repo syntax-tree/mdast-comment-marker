@@ -1,12 +1,14 @@
 /**
  * @typedef {string|number|boolean} MarkerParameterValue
+ * @typedef {import('mdast').Root} Root
+ * @typedef {import('mdast').Content} Content
+ * @typedef {import('mdast').HTML} HTML
+ * @typedef {import('mdast-util-mdx-expression').MDXFlowExpression} MDXFlowExpression
+ * @typedef {import('mdast-util-mdx-expression').MDXTextExpression} MDXTextExpression
+ * @typedef {Root|Content} Node
  * @typedef {Object.<string, MarkerParameterValue>} MarkerParameters
  *
- * @typedef HtmlNode
- * @property {'html'} type
- * @property {string} value
- *
- * @typedef CommentNode
+ * @typedef Mdx1CommentNode
  * @property {'comment'} type
  * @property {string} value
  *
@@ -14,11 +16,13 @@
  * @property {string} name
  * @property {string} attributes
  * @property {MarkerParameters|null} parameters
- * @property {HtmlNode|CommentNode} node
+ * @property {HTML|Mdx1CommentNode|MDXFlowExpression|MDXTextExpression} node
  */
 
 const commentExpression = /\s*([a-zA-Z\d-]+)(\s+([\s\S]*))?\s*/
-
+const esCommentExpression = new RegExp(
+  '(\\s*\\/\\*' + commentExpression.source + '\\*\\/\\s*)'
+)
 const markerExpression = new RegExp(
   '(\\s*<!--' + commentExpression.source + '-->\\s*)'
 )
@@ -29,19 +33,39 @@ const markerExpression = new RegExp(
  * @returns {Marker|null}
  */
 export function commentMarker(value) {
-  if (applicable(value)) {
-    const match = value.value.match(
-      value.type === 'comment' ? commentExpression : markerExpression
-    )
+  if (
+    isNode(value) &&
+    (value.type === 'html' ||
+      // @ts-expect-error: MDX@1
+      value.type === 'comment' ||
+      value.type === 'mdxFlowExpression' ||
+      value.type === 'mdxTextExpression')
+  ) {
+    let offset = 2
+    /** @type {RegExpMatchArray|null|undefined} */
+    let match
+
+    // @ts-expect-error: MDX@1
+    if (value.type === 'comment') {
+      // @ts-expect-error: MDX@1
+      match = value.value.match(commentExpression)
+      offset = 1
+    } else if (value.type === 'html') {
+      match = value.value.match(markerExpression)
+    } else if (
+      value.type === 'mdxFlowExpression' ||
+      value.type === 'mdxTextExpression'
+    ) {
+      match = value.value.match(esCommentExpression)
+    }
 
     if (match && match[0].length === value.value.length) {
-      const offset = value.type === 'comment' ? 1 : 2
       const parameters = parseParameters(match[offset + 1] || '')
 
       if (parameters) {
         return {
           name: match[offset],
-          attributes: match[offset + 2] || '',
+          attributes: (match[offset + 2] || '').trim(),
           parameters,
           node: value
         }
@@ -99,14 +123,8 @@ function parseParameters(value) {
 
 /**
  * @param {unknown} value
- * @returns {value is HtmlNode | CommentNode}
+ * @returns {value is Node}
  */
-function applicable(value) {
-  return Boolean(
-    value &&
-      typeof value === 'object' &&
-      'type' in value &&
-      // @ts-expect-error hush
-      (value.type === 'html' || value.type === 'comment')
-  )
+function isNode(value) {
+  return Boolean(value && typeof value === 'object' && 'type' in value)
 }

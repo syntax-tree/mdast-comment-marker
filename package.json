@@ -32,7 +32,7 @@
     "index.js"
   ],
   "devDependencies": {
-    "@types/mdast": "^3.0.0",
+    "@types/mdast": "^3.0.10",
     "@types/tape": "^4.0.0",
     "c8": "^7.0.0",
     "prettier": "^2.0.0",
@@ -61,7 +61,10 @@
     "trailingComma": "none"
   },
   "xo": {
-    "prettier": true
+    "prettier": true,
+    "rules": {
+      "unicorn/prefer-switch": "off"
+    }
   },
   "remarkConfig": {
     "plugins": [
@@ -72,5 +75,8 @@
     "atLeast": 100,
     "detail": true,
     "strict": true
+  },
+  "dependencies": {
+    "mdast-util-mdx-expression": "^1.1.0"
   }
 }
