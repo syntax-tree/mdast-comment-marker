@@ -20,7 +20,7 @@
  * @property {string} attributes
  *   Value after name.
  * @property {MarkerParameters|null} parameters
- *   Parsed attributes, with decimal numbers, `true`, and `false` casted to
+ *   Parsed attributes, with decimal numbers, `true`, and `false` are casted to
  *   numbers and booleans.
  * @property {HTML|Mdx1CommentNode|MDXFlowExpression|MDXTextExpression} node
  *   Reference to given node.

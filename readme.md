@@ -135,7 +135,7 @@ Comment marker.
 *   `name` (`string`) — name of marker
 *   `attributes` (`string`) — value after name
 *   `parameters` (`Object`) — parsed attributes, with decimal numbers, `true`,
-    and `false` casted to numbers and booleans
+    and `false` are casted to numbers and booleans
 *   `node` ([`Node`][node]) — reference to given node
 
 ## Types
