@@ -8,17 +8,58 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-[**mdast**][mdast] utility to parse comment markers.
+[mdast][] utility to parse comment markers.
+
+## Contents
+
+*   [What is this?](#what-is-this)
+*   [When should I use this?](#when-should-i-use-this)
+*   [Install](#install)
+*   [Use](#use)
+*   [API](#api)
+    *   [`commentMarker(node)`](#commentmarkernode)
+    *   [`Marker`](#marker)
+*   [Types](#types)
+*   [Compatibility](#compatibility)
+*   [Security](#security)
+*   [Related](#related)
+*   [Contribute](#contribute)
+*   [License](#license)
+
+## What is this?
+
+This package is a utility that tries to parse a structured marker from a
+comment.
+
+## When should I use this?
+
+Comments are a hidden part of markdown, so they can be used as processing
+instructions.
+For example, this utility is used in [`remark-lint`][remark-lint] to control
+whether lint rules are turned on or ignored, and by [`mdast-zone`][mdast-zone]
+to replace sections between two markers.
 
 ## Install
 
-This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
-Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
-
-[npm][]:
+This package is [ESM only][esm].
+In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
 
 ```sh
 npm install mdast-comment-marker
+```
+
+In Deno with [`esm.sh`][esmsh]:
+
+```js
+import {commentMarker} from 'https://esm.sh/mdast-comment-marker@2'
+```
+
+In browsers with [`esm.sh`][esmsh]:
+
+```html
+<script type="module">
+  import {commentMarker} from 'https://esm.sh/mdast-comment-marker@2?bundle'
+</script>
 ```
 
 ## Use
@@ -26,22 +67,16 @@ npm install mdast-comment-marker
 ```js
 import {commentMarker} from 'mdast-comment-marker'
 
-console.log(commentMarker({
-  type: 'html',
-  value: '<!--foo-->'
-}));
+console.log(commentMarker({type: 'html', value: '<!--foo-->'}));
 
 console.log(commentMarker({
   type: 'html',
   value: '<!--foo bar baz=12.4 qux="test test" quux=\'false\'-->'
 }));
 
-console.log(commentMarker({
-  type: 'html',
-  value: '<!doctype html>'
-}));
+console.log(commentMarker({type: 'html', value: '<!doctype html>'}));
 
-// Also supports MDX@2 expressions:
+// Also supports MDX expressions:
 console.log(commentMarker({
   type: 'mdxFlowExpression',
   value: '/* lint disable heading-style */'
@@ -80,48 +115,57 @@ null
 
 ## API
 
-This package exports the following identifiers: `commentMarker`.
+This package exports the identifier `commentMarker`.
 There is no default export.
 
 ### `commentMarker(node)`
 
-Parse a comment marker.
-
-###### Parameters
-
-*   `node` ([`Node`][node]) — [Node][] to parse
+Parse a comment marker from `node` ([`Node`][node]).
 
 ###### Returns
 
-[`Marker?`][marker] — Information, when applicable.
+Info, when applicable ([`Marker?`][marker]).
 
 ### `Marker`
 
-A comment marker.
+Comment marker.
 
 ###### Properties
 
-*   `name` (`string`) — Name of marker
-*   `attributes` (`string`) — Value after name
-*   `parameters` (`Object`) — Parsed attributes, tries to convert
-    values to numbers and booleans when possible
-*   `node` ([`Node`][node]) — Reference to given node
+*   `name` (`string`) — name of marker
+*   `attributes` (`string`) — value after name
+*   `parameters` (`Object`) — parsed attributes, with decimal numbers, `true`,
+    and `false` casted to numbers and booleans
+*   `node` ([`Node`][node]) — reference to given node
+
+## Types
+
+This package is fully typed with [TypeScript][].
+This package exports the types `Marker`, `MarkerParameterValue`, and
+`MarkerParameters`.
+
+## Compatibility
+
+Projects maintained by the unified collective are compatible with all maintained
+versions of Node.js.
+As of now, that is Node.js 12.20+, 14.14+, and 16.0+.
+Our projects sometimes work with older versions, but this is not guaranteed.
 
 ## Security
 
-Use of `mdast-comment-marker` does not involve [**hast**][hast], user content,
-or change the tree, so there are no openings for
-[cross-site scripting (XSS)][xss] attacks.
+Use of `mdast-comment-marker` does not involve [hast][], user content, or change
+the tree, so there are no openings for [cross-site scripting (XSS)][xss]
+attacks.
 
 ## Related
 
 *   [`mdast-zone`](https://github.com/syntax-tree/mdast-zone)
-    — treat HTML comments as ranges or markers
+    — change or replace a section marked by comments
 
 ## Contribute
 
-See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
-started.
+See [`contributing.md`][contributing] in [`syntax-tree/.github`][health] for
+ways to get started.
 See [`support.md`][support] for ways to get help.
 
 This project has a [code of conduct][coc].
@@ -162,15 +206,23 @@ abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
+[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+
+[esmsh]: https://esm.sh
+
+[typescript]: https://www.typescriptlang.org
+
 [license]: license
 
 [author]: https://wooorm.com
 
-[contributing]: https://github.com/syntax-tree/.github/blob/HEAD/contributing.md
+[health]: https://github.com/syntax-tree/.github
 
-[support]: https://github.com/syntax-tree/.github/blob/HEAD/support.md
+[contributing]: https://github.com/syntax-tree/.github/blob/main/contributing.md
 
-[coc]: https://github.com/syntax-tree/.github/blob/HEAD/code-of-conduct.md
+[support]: https://github.com/syntax-tree/.github/blob/main/support.md
+
+[coc]: https://github.com/syntax-tree/.github/blob/main/code-of-conduct.md
 
 [mdast]: https://github.com/syntax-tree/mdast
 
@@ -181,3 +233,7 @@ abide by its terms.
 [xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
 
 [hast]: https://github.com/syntax-tree/hast
+
+[remark-lint]: https://github.com/remarkjs/remark-lint
+
+[mdast-zone]: https://github.com/syntax-tree/mdast-zone
