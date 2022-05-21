@@ -1,22 +1,29 @@
 /**
- * @typedef {string|number|boolean} MarkerParameterValue
  * @typedef {import('mdast').Root} Root
  * @typedef {import('mdast').Content} Content
  * @typedef {import('mdast').HTML} HTML
  * @typedef {import('mdast-util-mdx-expression').MDXFlowExpression} MDXFlowExpression
  * @typedef {import('mdast-util-mdx-expression').MDXTextExpression} MDXTextExpression
  * @typedef {Root|Content} Node
- * @typedef {Object.<string, MarkerParameterValue>} MarkerParameters
+ *
+ * @typedef {string|number|boolean} MarkerParameterValue
+ * @typedef {Record<string, MarkerParameterValue>} MarkerParameters
  *
  * @typedef Mdx1CommentNode
  * @property {'comment'} type
  * @property {string} value
  *
  * @typedef Marker
+ *   Comment marker.
  * @property {string} name
+ *   Name of marker.
  * @property {string} attributes
+ *   Value after name.
  * @property {MarkerParameters|null} parameters
+ *   Parsed attributes, with decimal numbers, `true`, and `false` casted to
+ *   numbers and booleans.
  * @property {HTML|Mdx1CommentNode|MDXFlowExpression|MDXTextExpression} node
+ *   Reference to given node.
  */
 
 const commentExpression = /\s*([a-zA-Z\d-]+)(\s+([\s\S]*))?\s*/
@@ -29,8 +36,11 @@ const markerExpression = new RegExp(
 
 /**
  * Parse a comment marker.
+ *
  * @param {unknown} value
+ *   `Node` to parse.
  * @returns {Marker|null}
+ *   Information, when applicable.
  */
 export function commentMarker(value) {
   if (
