@@ -6,34 +6,35 @@
  * @typedef {import('mdast-util-mdx-expression').MDXTextExpression} MDXTextExpression
  */
 
-import test from 'tape'
+import assert from 'node:assert/strict'
+import test from 'node:test'
 import {commentMarker} from './index.js'
 
-test('commentMaker(node)', (t) => {
+test('commentMaker(node)', () => {
   // @ts-expect-error: runtime: not enough arguments.
-  t.equal(commentMarker(), null, 'should work without node')
+  assert.equal(commentMarker(), null, 'should work without node')
 
   /** @type {Paragraph} */
   const paragraph = {type: 'paragraph', children: []}
 
-  t.equal(commentMarker(paragraph), null, 'should work without html node')
+  assert.equal(commentMarker(paragraph), null, 'should work without html node')
 
   /** @type {HTML} */
   let html = {type: 'html', value: '<div></div>'}
 
-  t.equal(commentMarker(html), null, 'should work without comment')
+  assert.equal(commentMarker(html), null, 'should work without comment')
 
   html = {type: 'html', value: '<!-- -->'}
 
-  t.equal(commentMarker(html), null, 'should work for empty comments')
+  assert.equal(commentMarker(html), null, 'should work for empty comments')
 
   html = {type: 'html', value: '<!--foo-->this is something else.'}
 
-  t.equal(commentMarker(html), null, 'should work for partial comments')
+  assert.equal(commentMarker(html), null, 'should work for partial comments')
 
   html = {type: 'html', value: '<!--foo-->'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(html),
     {name: 'foo', attributes: '', parameters: {}, node: html},
     'marker without attributes'
@@ -41,7 +42,7 @@ test('commentMaker(node)', (t) => {
 
   html = {type: 'html', value: '<!-- foo -->'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(html),
     {name: 'foo', attributes: '', parameters: {}, node: html},
     'marker without attributes ignoring spaces'
@@ -49,7 +50,7 @@ test('commentMaker(node)', (t) => {
 
   html = {type: 'html', value: '<!--foo bar-->'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(html),
     {name: 'foo', attributes: 'bar', parameters: {bar: true}, node: html},
     'marker with boolean attributes'
@@ -57,7 +58,7 @@ test('commentMaker(node)', (t) => {
 
   html = {type: 'html', value: '<!--foo bar=baz qux-->'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(html),
     {
       name: 'foo',
@@ -70,7 +71,7 @@ test('commentMaker(node)', (t) => {
 
   html = {type: 'html', value: '<!--foo bar="baz qux"-->'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(html),
     {
       name: 'foo',
@@ -83,7 +84,7 @@ test('commentMaker(node)', (t) => {
 
   html = {type: 'html', value: "<!--foo bar='baz qux'-->"}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(html),
     {
       name: 'foo',
@@ -96,7 +97,7 @@ test('commentMaker(node)', (t) => {
 
   html = {type: 'html', value: '<!--foo bar=3-->'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(html),
     {
       name: 'foo',
@@ -109,7 +110,7 @@ test('commentMaker(node)', (t) => {
 
   html = {type: 'html', value: '<!--foo bar=true-->'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(html),
     {
       name: 'foo',
@@ -122,7 +123,7 @@ test('commentMaker(node)', (t) => {
 
   html = {type: 'html', value: '<!--foo bar=false-->'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(html),
     {
       name: 'foo',
@@ -135,28 +136,38 @@ test('commentMaker(node)', (t) => {
 
   html = {type: 'html', value: '<!--foo bar=-->'}
 
-  t.equal(commentMarker(html), null, 'marker stop for invalid parameters (#1)')
+  assert.equal(
+    commentMarker(html),
+    null,
+    'marker stop for invalid parameters (#1)'
+  )
 
   html = {type: 'html', value: '<!--foo bar= qux-->'}
 
-  t.equal(commentMarker(html), null, 'marker stop for invalid parameters (#2)')
+  assert.equal(
+    commentMarker(html),
+    null,
+    'marker stop for invalid parameters (#2)'
+  )
 
   html = {type: 'html', value: '<!--foo |-->'}
 
-  t.equal(commentMarker(html), null, 'marker stop for invalid parameters (#3)')
-
-  t.end()
+  assert.equal(
+    commentMarker(html),
+    null,
+    'marker stop for invalid parameters (#3)'
+  )
 })
 
-test('comment node', (t) => {
+test('comment node', () => {
   /** @type {Literal & {type: 'comment'}} */
   let comment = {type: 'comment', value: ' '}
 
-  t.equal(commentMarker(comment), null, 'should work for empty comments')
+  assert.equal(commentMarker(comment), null, 'should work for empty comments')
 
   comment = {type: 'comment', value: 'foo'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(comment),
     {name: 'foo', attributes: '', parameters: {}, node: comment},
     'comment without attributes'
@@ -164,7 +175,7 @@ test('comment node', (t) => {
 
   comment = {type: 'comment', value: ' foo '}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(comment),
     {name: 'foo', attributes: '', parameters: {}, node: comment},
     'comment without attributes ignoring spaces'
@@ -172,7 +183,7 @@ test('comment node', (t) => {
 
   comment = {type: 'comment', value: 'foo bar'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(comment),
     {name: 'foo', attributes: 'bar', parameters: {bar: true}, node: comment},
     'comment with boolean attributes'
@@ -180,7 +191,7 @@ test('comment node', (t) => {
 
   comment = {type: 'comment', value: 'foo bar=baz qux'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(comment),
     {
       name: 'foo',
@@ -193,7 +204,7 @@ test('comment node', (t) => {
 
   comment = {type: 'comment', value: 'foo bar="baz qux"'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(comment),
     {
       name: 'foo',
@@ -206,7 +217,7 @@ test('comment node', (t) => {
 
   comment = {type: 'comment', value: "foo bar='baz qux'"}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(comment),
     {
       name: 'foo',
@@ -219,7 +230,7 @@ test('comment node', (t) => {
 
   comment = {type: 'comment', value: 'foo bar=3'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(comment),
     {
       name: 'foo',
@@ -232,7 +243,7 @@ test('comment node', (t) => {
 
   comment = {type: 'comment', value: 'foo bar=true'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(comment),
     {
       name: 'foo',
@@ -245,7 +256,7 @@ test('comment node', (t) => {
 
   comment = {type: 'comment', value: 'foo bar=false'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(comment),
     {
       name: 'foo',
@@ -258,7 +269,7 @@ test('comment node', (t) => {
 
   comment = {type: 'comment', value: 'foo bar='}
 
-  t.equal(
+  assert.equal(
     commentMarker(comment),
     null,
     'marker stop for invalid parameters (#1)'
@@ -266,7 +277,7 @@ test('comment node', (t) => {
 
   comment = {type: 'comment', value: 'foo bar= qux'}
 
-  t.equal(
+  assert.equal(
     commentMarker(comment),
     null,
     'marker stop for invalid parameters (#2)'
@@ -274,23 +285,21 @@ test('comment node', (t) => {
 
   comment = {type: 'comment', value: 'foo |'}
 
-  t.equal(
+  assert.equal(
     commentMarker(comment),
     null,
     'marker stop for invalid parameters (#3)'
   )
-
-  t.end()
 })
 
-test('MDX@2 expressions', (t) => {
+test('MDX@2 expressions', () => {
   /** @type {MDXFlowExpression|MDXTextExpression} */
   let node = {
     type: 'mdxFlowExpression',
     value: '/* lint disable heading-style */'
   }
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(node),
     {
       name: 'lint',
@@ -303,11 +312,9 @@ test('MDX@2 expressions', (t) => {
 
   node = {type: 'mdxTextExpression', value: '/* lint enable */'}
 
-  t.deepEqual(
+  assert.deepEqual(
     commentMarker(node),
     {name: 'lint', attributes: 'enable', parameters: {enable: true}, node},
     'should work for comments'
   )
-
-  t.end()
 })
