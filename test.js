@@ -9,8 +9,15 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import {commentMarker} from './index.js'
+import * as mod from './index.js'
 
-test('commentMaker(node)', () => {
+test('commentMaker', () => {
+  assert.deepEqual(
+    Object.keys(mod).sort(),
+    ['commentMarker'],
+    'should expose the public api'
+  )
+
   // @ts-expect-error: runtime: not enough arguments.
   assert.equal(commentMarker(), null, 'should work without node')
 
