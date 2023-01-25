@@ -17,8 +17,10 @@
 *   [Install](#install)
 *   [Use](#use)
 *   [API](#api)
-    *   [`commentMarker(node)`](#commentmarkernode)
+    *   [`commentMarker(value)`](#commentmarkervalue)
     *   [`Marker`](#marker)
+    *   [`MarkerParameters`](#markerparameters)
+    *   [`MarkerParameterValue`](#markerparametervalue)
 *   [Types](#types)
 *   [Compatibility](#compatibility)
 *   [Security](#security)
@@ -42,7 +44,7 @@ to replace sections between two markers.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
+In Node.js (version 14.14+ and 16.0+), install with [npm][]:
 
 ```sh
 npm install mdast-comment-marker
@@ -115,40 +117,74 @@ null
 
 ## API
 
-This package exports the identifier `commentMarker`.
+This package exports the identifier [`commentMarker`][api-commentmarker].
 There is no default export.
 
-### `commentMarker(node)`
+### `commentMarker(value)`
 
-Parse a comment marker from `node` ([`Node`][node]).
+Parse a comment marker.
+
+###### Parameters
+
+*   `value` (`unknown`)
+    — thing to parse, typically [`Node`][node]
 
 ###### Returns
 
-Info, when applicable ([`Marker?`][marker]).
+Info ([`Marker`][api-marker]) when applicable or `null`.
 
 ### `Marker`
 
-Comment marker.
+Comment marker (TypeScript type).
 
 ###### Properties
 
-*   `name` (`string`) — name of marker
-*   `attributes` (`string`) — value after name
-*   `parameters` (`Object`) — parsed attributes, with decimal numbers, `true`,
-    and `false` are casted to numbers and booleans
-*   `node` ([`Node`][node]) — reference to given node
+*   `name` (`string`)
+    — name of marker
+*   `attributes` (`string`)
+    — value after name
+*   `parameters` ([`MarkerParameters`][api-markerparameters])
+    — parsed attributes
+*   `node` ([`Node`][node])
+    — reference to given node
+
+### `MarkerParameters`
+
+Parameters (TypeScript type).
+
+###### type
+
+```ts
+type MarkerParameters = Record<string, MarkerParameterValue>
+```
+
+### `MarkerParameterValue`
+
+Value (TypeScript type).
+
+If it looks like a number (to JavaScript), it’s cast as number.
+The strings `true` and `false` are turned into their corresponding
+booleans.
+The empty string is also considered the `true` boolean.
+
+###### type
+
+```ts
+type MarkerParameterValue = string | number | boolean
+```
 
 ## Types
 
 This package is fully typed with [TypeScript][].
-This package exports the types `Marker`, `MarkerParameterValue`, and
-`MarkerParameters`.
+This package exports the types [`Marker`][api-marker],
+[`MarkerParameters`][api-markerparameters], and
+[`MarkerParameterValue`][api-markerparametervalue]
 
 ## Compatibility
 
 Projects maintained by the unified collective are compatible with all maintained
 versions of Node.js.
-As of now, that is Node.js 12.20+, 14.14+, and 16.0+.
+As of now, that is Node.js 14.14+ and 16.0+.
 Our projects sometimes work with older versions, but this is not guaranteed.
 
 ## Security
@@ -228,8 +264,6 @@ abide by its terms.
 
 [node]: https://github.com/syntax-tree/unist#node
 
-[marker]: #marker
-
 [xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
 
 [hast]: https://github.com/syntax-tree/hast
@@ -237,3 +271,11 @@ abide by its terms.
 [remark-lint]: https://github.com/remarkjs/remark-lint
 
 [mdast-zone]: https://github.com/syntax-tree/mdast-zone
+
+[api-commentmarker]: #commentmarkervalue
+
+[api-marker]: #marker
+
+[api-markerparameters]: #markerparameters
+
+[api-markerparametervalue]: #markerparametervalue
