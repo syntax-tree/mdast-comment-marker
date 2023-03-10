@@ -164,6 +164,32 @@ test('commentMaker', () => {
     null,
     'marker stop for invalid parameters (#3)'
   )
+
+  html = {type: 'html', value: '<!--foo bar="" -->'}
+
+  assert.deepEqual(
+    commentMarker(html),
+    {
+      name: 'foo',
+      attributes: 'bar=""',
+      parameters: {bar: ''},
+      node: html
+    },
+    'marker with empty string attribute'
+  )
+
+  html = {type: 'html', value: '<!--foo bar="  " -->'}
+
+  assert.deepEqual(
+    commentMarker(html),
+    {
+      name: 'foo',
+      attributes: 'bar="  "',
+      parameters: {bar: '  '},
+      node: html
+    },
+    'marker with whitespace attribute'
+  )
 })
 
 test('comment node', () => {
