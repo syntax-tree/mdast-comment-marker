@@ -44,7 +44,7 @@ to replace sections between two markers.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 14.14+ and 16.0+), install with [npm][]:
+In Node.js (version 16+), install with [npm][]:
 
 ```sh
 npm install mdast-comment-marker
@@ -117,7 +117,7 @@ null
 
 ## API
 
-This package exports the identifier [`commentMarker`][api-commentmarker].
+This package exports the identifier [`commentMarker`][api-comment-marker].
 There is no default export.
 
 ### `commentMarker(value)`
@@ -143,7 +143,7 @@ Comment marker (TypeScript type).
     — name of marker
 *   `attributes` (`string`)
     — value after name
-*   `parameters` ([`MarkerParameters`][api-markerparameters])
+*   `parameters` ([`MarkerParameters`][api-marker-parameters])
     — parsed attributes
 *   `node` ([`Node`][node])
     — reference to given node
@@ -170,22 +170,25 @@ The empty string is also considered the `true` boolean.
 ###### type
 
 ```ts
-type MarkerParameterValue = string | number | boolean
+type MarkerParameterValue = number | string | boolean
 ```
 
 ## Types
 
 This package is fully typed with [TypeScript][].
 This package exports the types [`Marker`][api-marker],
-[`MarkerParameters`][api-markerparameters], and
-[`MarkerParameterValue`][api-markerparametervalue]
+[`MarkerParameters`][api-marker-parameters], and
+[`MarkerParameterValue`][api-marker-parameter-value]
 
 ## Compatibility
 
-Projects maintained by the unified collective are compatible with all maintained
+Projects maintained by the unified collective are compatible with maintained
 versions of Node.js.
-As of now, that is Node.js 14.14+ and 16.0+.
-Our projects sometimes work with older versions, but this is not guaranteed.
+
+When we cut a new major release, we drop support for unmaintained versions of
+Node.
+This means we try to keep the current release line, `mdast-comment-marker@^2`,
+compatible with Node.js 12.
 
 ## Security
 
@@ -226,9 +229,9 @@ abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/mdast-comment-marker
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/mdast-comment-marker.svg
+[size-badge]: https://img.shields.io/badge/dynamic/json?label=minzipped%20size&query=$.size.compressedSize&url=https://deno.bundlejs.com/?q=mdast-comment-marker
 
-[size]: https://bundlephobia.com/result?p=mdast-comment-marker
+[size]: https://bundlejs.com/?q=mdast-comment-marker
 
 [sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
@@ -272,10 +275,10 @@ abide by its terms.
 
 [mdast-zone]: https://github.com/syntax-tree/mdast-zone
 
-[api-commentmarker]: #commentmarkervalue
+[api-comment-marker]: #commentmarkervalue
 
 [api-marker]: #marker
 
-[api-markerparameters]: #markerparameters
+[api-marker-parameters]: #markerparameters
 
-[api-markerparametervalue]: #markerparametervalue
+[api-marker-parameter-value]: #markerparametervalue
