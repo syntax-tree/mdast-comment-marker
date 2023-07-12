@@ -1,9 +1,9 @@
 /**
  * @typedef {import('mdast').Literal} Literal
  * @typedef {import('mdast').Paragraph} Paragraph
- * @typedef {import('mdast').HTML} HTML
- * @typedef {import('mdast-util-mdx-expression').MDXFlowExpression} MDXFlowExpression
- * @typedef {import('mdast-util-mdx-expression').MDXTextExpression} MDXTextExpression
+ * @typedef {import('mdast').Html} Html
+ * @typedef {import('mdast-util-mdx-expression').MdxFlowExpression} MdxFlowExpression
+ * @typedef {import('mdast-util-mdx-expression').MdxTextExpression} MdxTextExpression
  */
 
 import assert from 'node:assert/strict'
@@ -26,7 +26,7 @@ test('commentMaker', () => {
 
   assert.equal(commentMarker(paragraph), null, 'should work without html node')
 
-  /** @type {HTML} */
+  /** @type {Html} */
   let html = {type: 'html', value: '<div></div>'}
 
   assert.equal(commentMarker(html), null, 'should work without comment')
@@ -326,7 +326,7 @@ test('comment node', () => {
 })
 
 test('MDX@2 expressions', () => {
-  /** @type {MDXFlowExpression|MDXTextExpression} */
+  /** @type {MdxFlowExpression | MdxTextExpression} */
   let node = {
     type: 'mdxFlowExpression',
     value: '/* lint disable heading-style */'
