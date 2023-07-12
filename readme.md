@@ -53,14 +53,14 @@ npm install mdast-comment-marker
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {commentMarker} from 'https://esm.sh/mdast-comment-marker@2'
+import {commentMarker} from 'https://esm.sh/mdast-comment-marker@3'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {commentMarker} from 'https://esm.sh/mdast-comment-marker@2?bundle'
+  import {commentMarker} from 'https://esm.sh/mdast-comment-marker@3?bundle'
 </script>
 ```
 
