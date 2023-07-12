@@ -103,7 +103,7 @@ Yields:
     value: `<!--foo bar baz=12.4 qux="test test" quux='false'-->`
   }
 }
-null
+undefined
 {
   name: 'lint',
   attributes: 'disable heading-style',
@@ -131,7 +131,7 @@ Parse a comment marker.
 
 ###### Returns
 
-Info ([`Marker`][api-marker]) when applicable or `null`.
+Info ([`Marker`][api-marker]) when applicable or `undefined`.
 
 ### `Marker`
 

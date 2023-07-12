@@ -13,32 +13,32 @@ test('commentMaker', async function (t) {
     assert.equal(
       // @ts-expect-error: check that the runtime handles a missing node.
       commentMarker(),
-      null
+      undefined
     )
   })
 
   await t.test('should work without html node', async function () {
     const paragraph = {type: 'paragraph', children: []}
 
-    assert.equal(commentMarker(paragraph), null)
+    assert.equal(commentMarker(paragraph), undefined)
   })
 
   await t.test('should work without comment', async function () {
     const html = {type: 'html', value: '<div></div>'}
 
-    assert.equal(commentMarker(html), null)
+    assert.equal(commentMarker(html), undefined)
   })
 
   await t.test('should work for empty comments', async function () {
     const html = {type: 'html', value: '<!-- -->'}
 
-    assert.equal(commentMarker(html), null)
+    assert.equal(commentMarker(html), undefined)
   })
 
   await t.test('should work for partial comments', async function () {
     const html = {type: 'html', value: '<!--foo-->this is something else.'}
 
-    assert.equal(commentMarker(html), null)
+    assert.equal(commentMarker(html), undefined)
   })
 
   await t.test('should support a marker without attributes', async function () {
@@ -160,7 +160,7 @@ test('commentMaker', async function (t) {
     async function () {
       const html = {type: 'html', value: '<!--foo bar=-->'}
 
-      assert.equal(commentMarker(html), null)
+      assert.equal(commentMarker(html), undefined)
     }
   )
 
@@ -169,7 +169,7 @@ test('commentMaker', async function (t) {
     async function () {
       const html = {type: 'html', value: '<!--foo bar= qux-->'}
 
-      assert.equal(commentMarker(html), null)
+      assert.equal(commentMarker(html), undefined)
     }
   )
 
@@ -178,7 +178,7 @@ test('commentMaker', async function (t) {
     async function () {
       const html = {type: 'html', value: '<!--foo |-->'}
 
-      assert.equal(commentMarker(html), null)
+      assert.equal(commentMarker(html), undefined)
     }
   )
 
