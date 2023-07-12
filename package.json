@@ -73,9 +73,6 @@
     "strict": true
   },
   "xo": {
-    "prettier": true,
-    "rules": {
-      "unicorn/prefer-switch": "off"
-    }
+    "prettier": true
   }
 }
