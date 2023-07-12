@@ -1,353 +1,394 @@
-/**
- * @typedef {import('mdast').Literal} Literal
- * @typedef {import('mdast').Paragraph} Paragraph
- * @typedef {import('mdast').Html} Html
- * @typedef {import('mdast-util-mdx-expression').MdxFlowExpression} MdxFlowExpression
- * @typedef {import('mdast-util-mdx-expression').MdxTextExpression} MdxTextExpression
- */
-
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import {commentMarker} from './index.js'
-import * as mod from './index.js'
 
-test('commentMaker', () => {
-  assert.deepEqual(
-    Object.keys(mod).sort(),
-    ['commentMarker'],
-    'should expose the public api'
-  )
+test('commentMaker', async function (t) {
+  await t.test('should expose the public api', async function () {
+    assert.deepEqual(Object.keys(await import('./index.js')).sort(), [
+      'commentMarker'
+    ])
+  })
 
-  // @ts-expect-error: runtime: not enough arguments.
-  assert.equal(commentMarker(), null, 'should work without node')
+  await t.test('should work without node', async function () {
+    assert.equal(
+      // @ts-expect-error: check that the runtime handles a missing node.
+      commentMarker(),
+      null
+    )
+  })
 
-  /** @type {Paragraph} */
-  const paragraph = {type: 'paragraph', children: []}
+  await t.test('should work without html node', async function () {
+    const paragraph = {type: 'paragraph', children: []}
 
-  assert.equal(commentMarker(paragraph), null, 'should work without html node')
+    assert.equal(commentMarker(paragraph), null)
+  })
 
-  /** @type {Html} */
-  let html = {type: 'html', value: '<div></div>'}
+  await t.test('should work without comment', async function () {
+    const html = {type: 'html', value: '<div></div>'}
 
-  assert.equal(commentMarker(html), null, 'should work without comment')
+    assert.equal(commentMarker(html), null)
+  })
 
-  html = {type: 'html', value: '<!-- -->'}
+  await t.test('should work for empty comments', async function () {
+    const html = {type: 'html', value: '<!-- -->'}
 
-  assert.equal(commentMarker(html), null, 'should work for empty comments')
+    assert.equal(commentMarker(html), null)
+  })
 
-  html = {type: 'html', value: '<!--foo-->this is something else.'}
+  await t.test('should work for partial comments', async function () {
+    const html = {type: 'html', value: '<!--foo-->this is something else.'}
 
-  assert.equal(commentMarker(html), null, 'should work for partial comments')
+    assert.equal(commentMarker(html), null)
+  })
 
-  html = {type: 'html', value: '<!--foo-->'}
+  await t.test('should support a marker without attributes', async function () {
+    const html = {type: 'html', value: '<!--foo-->'}
 
-  assert.deepEqual(
-    commentMarker(html),
-    {name: 'foo', attributes: '', parameters: {}, node: html},
-    'marker without attributes'
-  )
-
-  html = {type: 'html', value: '<!-- foo -->'}
-
-  assert.deepEqual(
-    commentMarker(html),
-    {name: 'foo', attributes: '', parameters: {}, node: html},
-    'marker without attributes ignoring spaces'
-  )
-
-  html = {type: 'html', value: '<!--foo bar-->'}
-
-  assert.deepEqual(
-    commentMarker(html),
-    {name: 'foo', attributes: 'bar', parameters: {bar: true}, node: html},
-    'marker with boolean attributes'
-  )
-
-  html = {type: 'html', value: '<!--foo bar=baz qux-->'}
-
-  assert.deepEqual(
-    commentMarker(html),
-    {
+    assert.deepEqual(commentMarker(html), {
       name: 'foo',
-      attributes: 'bar=baz qux',
-      parameters: {bar: 'baz', qux: true},
+      attributes: '',
+      parameters: {},
       node: html
-    },
-    'marker with unquoted attributes'
+    })
+  })
+
+  await t.test(
+    'should support a marker without attributes ignoring spaces',
+    async function () {
+      const html = {type: 'html', value: '<!-- foo -->'}
+
+      assert.deepEqual(commentMarker(html), {
+        name: 'foo',
+        attributes: '',
+        parameters: {},
+        node: html
+      })
+    }
   )
 
-  html = {type: 'html', value: '<!--foo bar="baz qux"-->'}
+  await t.test(
+    'should support a marker with boolean attributes',
+    async function () {
+      const html = {type: 'html', value: '<!--foo bar-->'}
 
-  assert.deepEqual(
-    commentMarker(html),
-    {
-      name: 'foo',
-      attributes: 'bar="baz qux"',
-      parameters: {bar: 'baz qux'},
-      node: html
-    },
-    'marker with double quoted attributes'
+      assert.deepEqual(commentMarker(html), {
+        name: 'foo',
+        attributes: 'bar',
+        parameters: {bar: true},
+        node: html
+      })
+    }
   )
 
-  html = {type: 'html', value: "<!--foo bar='baz qux'-->"}
+  await t.test(
+    'should support a marker with unquoted attributes',
+    async function () {
+      const html = {type: 'html', value: '<!--foo bar=baz qux-->'}
 
-  assert.deepEqual(
-    commentMarker(html),
-    {
-      name: 'foo',
-      attributes: "bar='baz qux'",
-      parameters: {bar: 'baz qux'},
-      node: html
-    },
-    'marker with single quoted attributes'
+      assert.deepEqual(commentMarker(html), {
+        name: 'foo',
+        attributes: 'bar=baz qux',
+        parameters: {bar: 'baz', qux: true},
+        node: html
+      })
+    }
   )
 
-  html = {type: 'html', value: '<!--foo bar=3-->'}
+  await t.test(
+    'should support a marker with double quoted attributes',
+    async function () {
+      const html = {type: 'html', value: '<!--foo bar="baz qux"-->'}
 
-  assert.deepEqual(
-    commentMarker(html),
-    {
+      assert.deepEqual(commentMarker(html), {
+        name: 'foo',
+        attributes: 'bar="baz qux"',
+        parameters: {bar: 'baz qux'},
+        node: html
+      })
+    }
+  )
+
+  await t.test(
+    'should support a marker with single quoted attributes',
+    async function () {
+      const html = {type: 'html', value: "<!--foo bar='baz qux'-->"}
+
+      assert.deepEqual(commentMarker(html), {
+        name: 'foo',
+        attributes: "bar='baz qux'",
+        parameters: {bar: 'baz qux'},
+        node: html
+      })
+    }
+  )
+
+  await t.test('should support a marker with numbers', async function () {
+    const html = {type: 'html', value: '<!--foo bar=3-->'}
+
+    assert.deepEqual(commentMarker(html), {
       name: 'foo',
       attributes: 'bar=3',
       parameters: {bar: 3},
       node: html
-    },
-    'marker with numbers'
-  )
+    })
+  })
 
-  html = {type: 'html', value: '<!--foo bar=true-->'}
+  await t.test('should support a marker with boolean true', async function () {
+    const html = {type: 'html', value: '<!--foo bar=true-->'}
 
-  assert.deepEqual(
-    commentMarker(html),
-    {
+    assert.deepEqual(commentMarker(html), {
       name: 'foo',
       attributes: 'bar=true',
       parameters: {bar: true},
       node: html
-    },
-    'marker with boolean true'
-  )
+    })
+  })
 
-  html = {type: 'html', value: '<!--foo bar=false-->'}
+  await t.test('should support a marker with boolean false', async function () {
+    const html = {type: 'html', value: '<!--foo bar=false-->'}
 
-  assert.deepEqual(
-    commentMarker(html),
-    {
+    assert.deepEqual(commentMarker(html), {
       name: 'foo',
       attributes: 'bar=false',
       parameters: {bar: false},
       node: html
-    },
-    'marker with boolean false'
+    })
+  })
+
+  await t.test(
+    'should support a marker stop for invalid parameters (#1)',
+    async function () {
+      const html = {type: 'html', value: '<!--foo bar=-->'}
+
+      assert.equal(commentMarker(html), null)
+    }
   )
 
-  html = {type: 'html', value: '<!--foo bar=-->'}
+  await t.test(
+    'should support a marker stop for invalid parameters (#2)',
+    async function () {
+      const html = {type: 'html', value: '<!--foo bar= qux-->'}
 
-  assert.equal(
-    commentMarker(html),
-    null,
-    'marker stop for invalid parameters (#1)'
+      assert.equal(commentMarker(html), null)
+    }
   )
 
-  html = {type: 'html', value: '<!--foo bar= qux-->'}
+  await t.test(
+    'should support a marker stop for invalid parameters (#3)',
+    async function () {
+      const html = {type: 'html', value: '<!--foo |-->'}
 
-  assert.equal(
-    commentMarker(html),
-    null,
-    'marker stop for invalid parameters (#2)'
+      assert.equal(commentMarker(html), null)
+    }
   )
 
-  html = {type: 'html', value: '<!--foo |-->'}
+  await t.test(
+    'should support a marker with empty string attribute',
+    async function () {
+      const html = {type: 'html', value: '<!--foo bar="" -->'}
 
-  assert.equal(
-    commentMarker(html),
-    null,
-    'marker stop for invalid parameters (#3)'
+      assert.deepEqual(commentMarker(html), {
+        name: 'foo',
+        attributes: 'bar=""',
+        parameters: {bar: ''},
+        node: html
+      })
+    }
   )
 
-  html = {type: 'html', value: '<!--foo bar="" -->'}
+  await t.test(
+    'should support a marker with whitespace attribute',
+    async function () {
+      const html = {type: 'html', value: '<!--foo bar="  " -->'}
 
-  assert.deepEqual(
-    commentMarker(html),
-    {
-      name: 'foo',
-      attributes: 'bar=""',
-      parameters: {bar: ''},
-      node: html
-    },
-    'marker with empty string attribute'
-  )
-
-  html = {type: 'html', value: '<!--foo bar="  " -->'}
-
-  assert.deepEqual(
-    commentMarker(html),
-    {
-      name: 'foo',
-      attributes: 'bar="  "',
-      parameters: {bar: '  '},
-      node: html
-    },
-    'marker with whitespace attribute'
+      assert.deepEqual(commentMarker(html), {
+        name: 'foo',
+        attributes: 'bar="  "',
+        parameters: {bar: '  '},
+        node: html
+      })
+    }
   )
 })
 
-test('comment node', () => {
-  /** @type {Literal & {type: 'comment'}} */
-  let comment = {type: 'comment', value: ' '}
+test('comment node', async function (t) {
+  await t.test('should work for empty comments', async function () {
+    const comment = {type: 'comment', value: ' '}
 
-  assert.equal(commentMarker(comment), null, 'should work for empty comments')
+    assert.equal(commentMarker(comment), null)
+  })
 
-  comment = {type: 'comment', value: 'foo'}
+  await t.test(
+    'should support a comment without attributes',
+    async function () {
+      const comment = {type: 'comment', value: 'foo'}
 
-  assert.deepEqual(
-    commentMarker(comment),
-    {name: 'foo', attributes: '', parameters: {}, node: comment},
-    'comment without attributes'
+      assert.deepEqual(commentMarker(comment), {
+        name: 'foo',
+        attributes: '',
+        parameters: {},
+        node: comment
+      })
+    }
   )
 
-  comment = {type: 'comment', value: ' foo '}
+  await t.test(
+    'should support a comment without attributes ignoring spaces',
+    async function () {
+      const comment = {type: 'comment', value: ' foo '}
 
-  assert.deepEqual(
-    commentMarker(comment),
-    {name: 'foo', attributes: '', parameters: {}, node: comment},
-    'comment without attributes ignoring spaces'
+      assert.deepEqual(commentMarker(comment), {
+        name: 'foo',
+        attributes: '',
+        parameters: {},
+        node: comment
+      })
+    }
   )
 
-  comment = {type: 'comment', value: 'foo bar'}
+  await t.test(
+    'should support a comment with boolean attributes',
+    async function () {
+      const comment = {type: 'comment', value: 'foo bar'}
 
-  assert.deepEqual(
-    commentMarker(comment),
-    {name: 'foo', attributes: 'bar', parameters: {bar: true}, node: comment},
-    'comment with boolean attributes'
+      assert.deepEqual(commentMarker(comment), {
+        name: 'foo',
+        attributes: 'bar',
+        parameters: {bar: true},
+        node: comment
+      })
+    }
   )
 
-  comment = {type: 'comment', value: 'foo bar=baz qux'}
+  await t.test(
+    'should support a comment with unquoted attributes',
+    async function () {
+      const comment = {type: 'comment', value: 'foo bar=baz qux'}
 
-  assert.deepEqual(
-    commentMarker(comment),
-    {
-      name: 'foo',
-      attributes: 'bar=baz qux',
-      parameters: {bar: 'baz', qux: true},
-      node: comment
-    },
-    'comment with unquoted attributes'
+      assert.deepEqual(commentMarker(comment), {
+        name: 'foo',
+        attributes: 'bar=baz qux',
+        parameters: {bar: 'baz', qux: true},
+        node: comment
+      })
+    }
   )
 
-  comment = {type: 'comment', value: 'foo bar="baz qux"'}
+  await t.test(
+    'should support a comment with double quoted attributes',
+    async function () {
+      const comment = {type: 'comment', value: 'foo bar="baz qux"'}
 
-  assert.deepEqual(
-    commentMarker(comment),
-    {
-      name: 'foo',
-      attributes: 'bar="baz qux"',
-      parameters: {bar: 'baz qux'},
-      node: comment
-    },
-    'comment with double quoted attributes'
+      assert.deepEqual(commentMarker(comment), {
+        name: 'foo',
+        attributes: 'bar="baz qux"',
+        parameters: {bar: 'baz qux'},
+        node: comment
+      })
+    }
   )
 
-  comment = {type: 'comment', value: "foo bar='baz qux'"}
+  await t.test(
+    'should support a comment with single quoted attributes',
+    async function () {
+      const comment = {type: 'comment', value: "foo bar='baz qux'"}
 
-  assert.deepEqual(
-    commentMarker(comment),
-    {
-      name: 'foo',
-      attributes: "bar='baz qux'",
-      parameters: {bar: 'baz qux'},
-      node: comment
-    },
-    'comment with single quoted attributes'
+      assert.deepEqual(commentMarker(comment), {
+        name: 'foo',
+        attributes: "bar='baz qux'",
+        parameters: {bar: 'baz qux'},
+        node: comment
+      })
+    }
   )
 
-  comment = {type: 'comment', value: 'foo bar=3'}
+  await t.test('should support a comment with numbers', async function () {
+    const comment = {type: 'comment', value: 'foo bar=3'}
 
-  assert.deepEqual(
-    commentMarker(comment),
-    {
+    assert.deepEqual(commentMarker(comment), {
       name: 'foo',
       attributes: 'bar=3',
       parameters: {bar: 3},
       node: comment
-    },
-    'comment with numbers'
-  )
+    })
+  })
 
-  comment = {type: 'comment', value: 'foo bar=true'}
+  await t.test('should support a comment with boolean true', async function () {
+    const comment = {type: 'comment', value: 'foo bar=true'}
 
-  assert.deepEqual(
-    commentMarker(comment),
-    {
+    assert.deepEqual(commentMarker(comment), {
       name: 'foo',
       attributes: 'bar=true',
       parameters: {bar: true},
       node: comment
-    },
-    'comment with boolean true'
+    })
+  })
+
+  await t.test(
+    'should support a comment with boolean false',
+    async function () {
+      const comment = {type: 'comment', value: 'foo bar=false'}
+
+      assert.deepEqual(commentMarker(comment), {
+        name: 'foo',
+        attributes: 'bar=false',
+        parameters: {bar: false},
+        node: comment
+      })
+    }
   )
 
-  comment = {type: 'comment', value: 'foo bar=false'}
+  await t.test(
+    'should support a marker stop for invalid parameters (#1)',
+    async function () {
+      const comment = {type: 'comment', value: 'foo bar='}
 
-  assert.deepEqual(
-    commentMarker(comment),
-    {
-      name: 'foo',
-      attributes: 'bar=false',
-      parameters: {bar: false},
-      node: comment
-    },
-    'comment with boolean false'
+      assert.equal(commentMarker(comment), null)
+    }
   )
 
-  comment = {type: 'comment', value: 'foo bar='}
+  await t.test(
+    'should support a marker stop for invalid parameters (#2)',
+    async function () {
+      const comment = {type: 'comment', value: 'foo bar= qux'}
 
-  assert.equal(
-    commentMarker(comment),
-    null,
-    'marker stop for invalid parameters (#1)'
+      assert.equal(commentMarker(comment), null)
+    }
   )
 
-  comment = {type: 'comment', value: 'foo bar= qux'}
+  await t.test(
+    'should support a marker stop for invalid parameters (#3)',
+    async function () {
+      const comment = {type: 'comment', value: 'foo |'}
 
-  assert.equal(
-    commentMarker(comment),
-    null,
-    'marker stop for invalid parameters (#2)'
-  )
-
-  comment = {type: 'comment', value: 'foo |'}
-
-  assert.equal(
-    commentMarker(comment),
-    null,
-    'marker stop for invalid parameters (#3)'
+      assert.equal(commentMarker(comment), null)
+    }
   )
 })
 
-test('MDX@2 expressions', () => {
-  /** @type {MdxFlowExpression | MdxTextExpression} */
-  let node = {
-    type: 'mdxFlowExpression',
-    value: '/* lint disable heading-style */'
-  }
+test('MDX@2 expressions', async function (t) {
+  await t.test('should work for comments', async function () {
+    const node = {
+      type: 'mdxFlowExpression',
+      value: '/* lint disable heading-style */'
+    }
 
-  assert.deepEqual(
-    commentMarker(node),
-    {
+    assert.deepEqual(commentMarker(node), {
       name: 'lint',
       attributes: 'disable heading-style',
       parameters: {disable: true, 'heading-style': true},
       node
-    },
-    'should work for comments'
-  )
+    })
+  })
 
-  node = {type: 'mdxTextExpression', value: '/* lint enable */'}
+  await t.test('should work for comments', async function () {
+    const node = {type: 'mdxTextExpression', value: '/* lint enable */'}
 
-  assert.deepEqual(
-    commentMarker(node),
-    {name: 'lint', attributes: 'enable', parameters: {enable: true}, node},
-    'should work for comments'
-  )
+    assert.deepEqual(commentMarker(node), {
+      name: 'lint',
+      attributes: 'enable',
+      parameters: {enable: true},
+      node
+    })
+  })
 })
